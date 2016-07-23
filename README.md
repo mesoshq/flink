@@ -12,7 +12,9 @@ For example, if you'd want to set `recovery.mode`, you'd have to specify `flink_
 
 Those environment variables will be automatically added to the `flink-config.yaml` file by the `docker-entrypoint.sh` script before the startup.
 
-## Examples
+## Running
+
+### Via standalone Docker
 
 Start a standalone JobManager (with host networking, binding on 127.0.0.1):
 
@@ -44,4 +46,93 @@ docker run -d \
   -e PORT1=7002 \
   -e PORT2=7003 \
   mesoshq/flink:0.1.0 taskmanager
+```
+
+### Via Mesos/Marathon
+ 
+Start a standalone JobManager (you need to replace the `flink_recovery_zookeeper_quorum` variable with a valid setting for your cluster):
+
+```
+{
+  "id": "/flink/jobmanager",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 1024,
+  "disk": 0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "mesoshq/flink:0.1.1",
+      "network": "HOST",
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": true
+    }
+  },
+  "args": ["jobmanager"],
+  "env": {
+    "flink_recovery_mode": "zookeeper",
+    "flink_recovery_zookeeper_quorum": "172.17.10.101:2181",
+    "flink_recovery_zookeeper_storageDir": "/data/zk"
+  },
+  "ports": [0, 0],
+  "healthChecks": [
+    {
+      "portIndex": 0,
+      "protocol": "TCP",
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 10,
+      "timeoutSeconds": 3,
+      "maxConsecutiveFailures": 1
+    }
+  ]
+}
+```
+
+Start a TaskManager:
+
+```
+{
+  "id": "/flink/taskmanager",
+  "cmd": null,
+  "cpus": 2,
+  "mem": 4096,
+  "disk": 0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "mesoshq/flink:0.1.1",
+      "network": "HOST",
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": true
+    }
+  },
+  "args": ["taskmanager"],
+  "env": {
+    "flink_recovery_mode": "zookeeper",
+    "flink_recovery_zookeeper_quorum": "172.17.10.101:2181",
+    "flink_recovery_zookeeper_storageDir": "/data/zk",
+    "flink_taskmanager_tmp_dirs": "/data/tasks",
+    "flink_state_backend": "filesystem",
+    "flink_blob_storage_directory": "/data/blobs",
+    "flink_taskmanager_numberOfTaskSlots": "2",
+    "flink_taskmanager_heap_mb": "4096"
+  },
+  "ports": [0, 0, 0],
+  "healthChecks": [
+    {
+      "portIndex": 0,
+      "protocol": "TCP",
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 10,
+      "timeoutSeconds": 3,
+      "maxConsecutiveFailures": 1
+    }
+  ]
+}
 ```
