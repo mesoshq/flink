@@ -14,31 +14,34 @@ Those environment variables will be automatically added to the `flink-config.yam
 
 ## Examples
 
-Start a JobManager with ZooKeeper storage:
+Start a standalone JobManager (with host networking, binding on 127.0.0.1):
 
 ```
 docker run -d \
-  -e flink_recovery_mode=zookeeper \
-  -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
-  -e flink_recovery_zookeeper_storageDir=/data/zk \
   --name JobManager \
-  --net=host \ 
+  --net=host \
+  -e HOST=127.0.0.1 \
+  -e PORT0=6123 \
+  -e PORT1=8081 \
   mesoshq/flink:0.1.0 jobmanager
 ```
 
 Start a TaskManager:
 
 ```
-docker run -d \ 
-  -e flink_recovery_mode=zookeeper \
-  -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
-  -e flink_recovery_zookeeper_storageDir=/data/zk \
+docker run -d \
+  --name TaskManager \
+  --net=host \
+  -e flink_jobmanager_rpc_address=127.0.0.1 \
+  -e flink_jobmanager_rpc_port=6123 \
   -e flink_taskmanager_tmp_dirs=/data/tasks \
   -e flink_blob_storage_directory=/data/blobs \
   -e flink_state_backend=filesystem \
   -e flink_taskmanager_numberOfTaskSlots=1 \
   -e flink_taskmanager_heap_mb=2048 \
-  --name JobManager \
-  --net=host \ 
-  mesoshq/flink:0.1.0 jobmanager
+  -e HOST=127.0.0.1 \
+  -e PORT0=7001 \
+  -e PORT1=7002 \
+  -e PORT2=7003 \
+  mesoshq/flink:0.1.0 taskmanager
 ```
