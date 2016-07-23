@@ -17,28 +17,28 @@ Those environment variables will be automatically added to the `flink-config.yam
 Start a JobManager with ZooKeeper storage:
 
 ```
-docker run -d 
-       -e flink_recovery_mode=zookeeper \
-       -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
-       -e flink_recovery_zookeeper_storageDir=/data/zk \
-       --name JobManager \
-       --net=host \ 
-       mesoshq/flink:0.1.0 jobmanager
+docker run -d \
+  -e flink_recovery_mode=zookeeper \
+  -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
+  -e flink_recovery_zookeeper_storageDir=/data/zk \
+  --name JobManager \
+  --net=host \ 
+  mesoshq/flink:0.1.0 jobmanager
 ```
 
 Start a TaskManager:
 
 ```
-docker run -d 
-       -e flink_recovery_mode=zookeeper \
-       -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
-       -e flink_recovery_zookeeper_storageDir=/data/zk \
-       -e flink_taskmanager_tmp_dirs=/data/tasks \
-       -e flink_blob_storage_directory=/data/blobs \
-       -e flink_state_backend=filesystem \
-       -e flink_taskmanager_numberOfTaskSlots=1 \
-       -e flink_taskmanager_heap_mb=2048 \
-       --name JobManager \
-       --net=host \ 
-       mesoshq/flink:0.1.0 jobmanager
+docker run -d \ 
+  -e flink_recovery_mode=zookeeper \
+  -e flink_recovery_zookeeper_quorum=172.17.10.101:2181 \
+  -e flink_recovery_zookeeper_storageDir=/data/zk \
+  -e flink_taskmanager_tmp_dirs=/data/tasks \
+  -e flink_blob_storage_directory=/data/blobs \
+  -e flink_state_backend=filesystem \
+  -e flink_taskmanager_numberOfTaskSlots=1 \
+  -e flink_taskmanager_heap_mb=2048 \
+  --name JobManager \
+  --net=host \ 
+  mesoshq/flink:0.1.0 jobmanager
 ```
