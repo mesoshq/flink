@@ -1,4 +1,4 @@
-# A Docker image for Apache Flink (1.0.3)
+# A Docker image for Apache Flink (1.1.2)
 
 A base image for creating Apache Flink clusters. Usable to create jobmanagers or taskmanagers.
 
@@ -6,7 +6,7 @@ A base image for creating Apache Flink clusters. Usable to create jobmanagers or
 
 ### Configuration properties
 
-You can set every [https://ci.apache.org/projects/flink/flink-docs-release-1.0/setup/config.html](config property) by passing it as lowercase environment variable in the Marathon app definition's `env` map, where the variable name is the original property with `_` instead of `.`, prepended by `flink_`.
+You can set every [https://ci.apache.org/projects/flink/flink-docs-release-1.1/setup/config.html](config property) by passing it as lowercase environment variable in the Marathon app definition's `env` map, where the variable name is the original property with `_` instead of `.`, prepended by `flink_`.
 
 For example, if you'd want to set `recovery.mode`, you'd have to specify `flink_recovery_mode` as environment variable (e.g. `-e flink_recovery_mode=zookeeper`) with an appropriate value.
 
@@ -25,7 +25,7 @@ docker run -d \
   -e HOST=127.0.0.1 \
   -e PORT0=6123 \
   -e PORT1=8081 \
-  mesoshq/flink:0.1.0 jobmanager
+  mesoshq/flink:1.1.2 jobmanager
 ```
 
 Start a TaskManager:
@@ -45,7 +45,7 @@ docker run -d \
   -e PORT0=7001 \
   -e PORT1=7002 \
   -e PORT2=7003 \
-  mesoshq/flink:0.1.0 taskmanager
+  mesoshq/flink:1.1.2 taskmanager
 ```
 
 ### Via Mesos/Marathon
@@ -64,7 +64,7 @@ Start a standalone JobManager (you need to replace the `flink_recovery_zookeeper
     "type": "DOCKER",
     "volumes": [],
     "docker": {
-      "image": "mesoshq/flink:0.1.1",
+      "image": "mesoshq/flink:1.1.2",
       "network": "HOST",
       "privileged": false,
       "parameters": [],
@@ -105,7 +105,7 @@ Start a TaskManager:
     "type": "DOCKER",
     "volumes": [],
     "docker": {
-      "image": "mesoshq/flink:0.1.1",
+      "image": "mesoshq/flink:1.1.2",
       "network": "HOST",
       "privileged": false,
       "parameters": [],
