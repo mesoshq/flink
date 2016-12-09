@@ -1,4 +1,4 @@
-# A Docker image for Apache Flink (1.1.2)
+# A Docker image for Apache Flink
 
 A base image for creating Apache Flink clusters. Usable to create jobmanagers or taskmanagers.
 
@@ -25,7 +25,7 @@ docker run -d \
   -e HOST=127.0.0.1 \
   -e PORT0=6123 \
   -e PORT1=8081 \
-  mesoshq/flink:1.1.2 jobmanager
+  mesoshq/flink:1.1.3 jobmanager
 ```
 
 Start a TaskManager:
@@ -45,7 +45,7 @@ docker run -d \
   -e PORT0=7001 \
   -e PORT1=7002 \
   -e PORT2=7003 \
-  mesoshq/flink:1.1.2 taskmanager
+  mesoshq/flink:1.1.3 taskmanager
 ```
 
 ### Via Mesos/Marathon
